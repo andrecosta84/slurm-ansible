@@ -1,0 +1,12 @@
+---
+# handlers file for munge
+
+- name: restart ssh
+  service:
+    name=sshd
+    state=restarted
+
+- name: reload munge
+  service:
+    name=munge
+    state=restarted

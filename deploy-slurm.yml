@@ -1,0 +1,31 @@
+---
+- name: munge
+  hosts: all
+
+  roles:
+    - munge
+
+- name: MariaDB
+  hosts: controller
+    
+  roles:
+    - db
+
+- name: slurm
+  hosts: all
+
+  roles:
+    - slurm
+
+- name: slurm-controller
+  hosts: controller
+
+  roles:
+    - slurm-control
+
+- name: wrapper
+  hosts: all
+
+  roles:
+    - wrapper
+

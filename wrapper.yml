@@ -1,0 +1,8 @@
+---
+
+- name: wrapper
+  hosts: all
+    
+  roles:
+    - wrapper
+

@@ -1,0 +1,8 @@
+[controller]
+slurm1
+
+[compute]
+slurm1
+slurm2
+slurm3
+

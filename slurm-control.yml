@@ -1,0 +1,8 @@
+---
+
+- name: slurm-controller
+  hosts: controller
+    
+  roles:
+    - slurm-control
+

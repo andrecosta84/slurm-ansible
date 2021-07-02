@@ -1,0 +1,8 @@
+---
+
+- name: MariaDB
+  hosts: controller
+    
+  roles:
+    - db
+

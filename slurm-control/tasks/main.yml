@@ -1,0 +1,22 @@
+---
+# tasks file for slurm-control
+
+- name: Create slurmdbd.conf configuration file
+  template: src=slurmdbd.conf dest=/etc/slurm/slurmdbd.conf owner=slurm group=slurm mode=0600
+
+- name: Create slurmdb log file
+  file: path=/var/log/slurm/slurmdbd.log state=touch owner=slurm group=slurm mode=0775
+
+- name: copy slurmdb service to systemctl
+  copy: src=~/projects/slurm-build/slurm-20.11.7/etc/slurmdbd.service dest=/lib/systemd/system remote_src=yes
+
+- name: Ensure slurmdbd is enabled and running
+  service: name=slurmdbd enabled=yes state=started
+
+- name: Create slurm.conf configuration file
+  template: src=slurm.conf dest=/etc/slurm/slurm.conf
+
+- name: copy slurmctl service to systemctl
+  copy: src=~/projects/slurm-build/slurm-20.11.7/etc/slurmctld.service dest=/lib/systemd/system remote_src=yes
+
+

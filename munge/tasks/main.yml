@@ -1,0 +1,40 @@
+---
+# tasks file for munge
+
+- name: apt-get update
+  apt:
+    update_cache: yes
+
+- name: Install munge dependencies
+  apt:
+    pkg:
+    - build-essential
+    - zlib1g-dev
+    - libssl1.0-dev
+
+- name: Install munge
+  apt:
+    pkg:
+    - munge
+    - libmunge-dev
+
+- name: Fetch munge key from the slurm1 to master
+  run_once: yes
+  fetch: src=/etc/munge/munge.key dest=buffer/ flat=yes
+  when: inventory_hostname == 'slurm1'
+
+- name: Copy munge key from master to slurm2
+  copy: src=buffer/munge.key dest=/etc/munge/munge.key
+  when: inventory_hostname == 'slurm2'
+
+- name: Copy munge key from master to slurm3
+  copy: src=buffer/munge.key dest=/etc/munge/munge.key
+  when: inventory_hostname == 'slurm3'
+
+- name: Reload munge service
+  service: name=munge state=restarted
+
+- name: Ensure Munge is enabled and running
+  service: name=munge enabled=yes state=started
+
+

@@ -1,0 +1,45 @@
+---
+# tasks file for slurm
+
+- name: create slurm project directory 
+  file: state=directory path=~/projects/slurm-build
+
+- name: download slurm sources
+  get_url: url=https://download.schedmd.com/slurm/slurm-20.11.7.tar.bz2 dest=~/projects/slurm-build/slurm-20.11.7.tar.bz2
+
+- name: untar slurm installation file
+  unarchive:
+    src: ~/projects/slurm-build/slurm-20.11.7.tar.bz2
+    dest: ~/projects/slurm-build
+    remote_src: yes
+
+- name: Configure slurm
+  shell: ./configure --sysconfdir=/etc/slurm
+  args:
+    chdir: /root/projects/slurm-build/slurm-20.11.7
+
+- name: make slurm
+  shell: /usr/bin/make
+  args:
+    chdir: /root/projects/slurm-build/slurm-20.11.7
+
+- name: make install slurm
+  shell: /usr/bin/make install
+  args:
+    chdir: /root/projects/slurm-build/slurm-20.11.7
+
+- name: Add the user slurm
+  user:
+    name: slurm
+
+- name: create slurm directories if they don't exist
+  file:
+    path: "{{ item }}"
+    state: directory
+    owner: slurm
+    group: slurm
+  loop:
+    - /var/spool/slurm/ctld
+    - /var/spool/slurm/d
+    - /etc/slurm
+    - /var/log/slurm

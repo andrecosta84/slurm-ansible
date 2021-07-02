@@ -1,0 +1,26 @@
+---
+# tasks file for db
+
+- name: Install MariaDB packages
+  apt:
+    pkg:
+    - mariadb-server
+    - libmariadb-dev
+    - python3-pip
+    - libmysqlclient-dev
+
+- name: Install pymysql
+  pip:
+     name: pymysql
+     executable: pip3
+
+- name: Start MariaDB Service
+  service: name=mariadb state=started enabled=yes
+
+- name: Create Application Database
+  mysql_db: name=slurm_acct_db state=present login_unix_socket=/var/run/mysqld/mysqld.sock
+
+- name: Create Application DB User
+  mysql_user: name=slurm password=slurmdbpass priv=*.*:ALL,GRANT host=localhost state=present login_unix_socket=/var/run/mysqld/mysqld.sock 
+
+

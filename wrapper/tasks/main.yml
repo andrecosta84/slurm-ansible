@@ -1,0 +1,17 @@
+---
+# tasks file for wrapper
+
+- name: Copy slurm.conf to compute nodes
+  template: src=slurm.conf dest=/etc/slurm/slurm.conf
+
+- name: copy slurm service to systemctl
+  copy: src=~/projects/slurm-build/slurm-20.11.7/etc/slurmd.service dest=/lib/systemd/system remote_src=yes
+
+- name: Ensure slurm is enabled and running
+  service: name=slurmd enabled=yes state=started
+
+- name: Ensure slurmctld is enabled and running
+  service: name=slurmctld enabled=yes state=started
+  when: ansible_hostname == 'slurm1'
+
+
